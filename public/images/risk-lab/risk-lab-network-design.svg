@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace">
+  <defs>
+    <marker id="rmf-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#3ef08b"/>
+    </marker>
+    <marker id="rmf-green-s" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#3ef08b"/>
+    </marker>
+    <marker id="rmf-green-e" markerWidth="10" markerHeight="10" refX="2" refY="3" orient="auto">
+      <path d="M8,0 L0,3 L8,6 Z" fill="#3ef08b"/>
+    </marker>
+    <marker id="rmf-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#ff5b6a"/>
+    </marker>
+  </defs>
+
+  <style>
+    .bg { fill:#08110b; }
+    .title { fill:#3ef08b; font-size:19px; font-weight:700; }
+    .sub { fill:#7a9c88; font-size:12px; }
+    .vnet { fill:#0c130e; stroke:#2f6b48; stroke-width:1.5; }
+    .vnetlbl { fill:#7a9c88; font-size:12px; letter-spacing:1px; }
+    .zone { fill:#101a13; stroke:#2f6b48; stroke-width:1; stroke-dasharray:5 4; }
+    .zonelbl { fill:#d4f5e2; font-size:12.5px; font-weight:600; }
+    .vm { fill:#121c15; stroke:#3ef08b; stroke-width:1.4; }
+    .ext { fill:#121c15; stroke:#7a9c88; stroke-width:1.2; }
+    .vmname { fill:#d4f5e2; font-size:13px; font-weight:600; }
+    .vmsub { fill:#7a9c88; font-size:11px; }
+    .vmrole { fill:#3ef08b; font-size:11px; }
+    .nsg { fill:#0d1f16; stroke:#3ef08b; stroke-width:1; }
+    .nsgtxt { fill:#3ef08b; font-size:9.5px; letter-spacing:0.5px; }
+    .flow-g { stroke:#3ef08b; stroke-width:1.8; fill:none; }
+    .flow-r { stroke:#ff5b6a; stroke-width:1.6; fill:none; stroke-dasharray:5 4; }
+    .plabel { font-size:10.5px; }
+    .pill { fill:#0a1610; stroke-width:0; }
+    .legtxt { fill:#7a9c88; font-size:11px; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="900" height="540" rx="14"/>
+
+  <text class="title" x="28" y="40">Azure Risk Management &amp; STIG Lab — Logical Network Design</text>
+  <text class="sub" x="28" y="60">Isolated AD domain · RMF assessment (Nessus + SCC) and STIG hardening</text>
+
+  <!-- External nodes -->
+  <rect class="ext" x="330" y="80" width="250" height="54" rx="7"/>
+  <text class="vmname" x="455" y="103" text-anchor="middle">Analyst / Scanner Workstation</text>
+  <text class="vmsub" x="455" y="121" text-anchor="middle">Nessus 10.x · SCC 5.14 · fixed IP</text>
+
+  <rect class="ext" x="48" y="84" width="170" height="50" rx="7"/>
+  <text class="vmname" x="133" y="106" text-anchor="middle">Internet</text>
+  <text class="vmsub" x="133" y="122" text-anchor="middle">untrusted</text>
+
+  <!-- VNet -->
+  <rect class="vnet" x="24" y="176" width="852" height="298" rx="10"/>
+  <text class="vnetlbl" x="42" y="202">AZURE VIRTUAL NETWORK · vnet-rmf</text>
+
+  <!-- AD subnet -->
+  <rect class="zone" x="60" y="222" width="780" height="228" rx="8"/>
+  <text class="zonelbl" x="80" y="248">AD Subnet — intranet only</text>
+  <rect class="nsg" x="300" y="234" width="66" height="18" rx="4"/>
+  <text class="nsgtxt" x="333" y="247" text-anchor="middle">NSG</text>
+
+  <!-- DC -->
+  <rect class="vm" x="130" y="300" width="280" height="120" rx="7"/>
+  <text class="vmname" x="270" y="332" text-anchor="middle">DC01 · lab.local</text>
+  <text class="vmrole" x="270" y="352" text-anchor="middle">AD DS · DNS</text>
+  <text class="vmsub" x="270" y="372" text-anchor="middle">Windows Server 2022</text>
+  <text class="vmsub" x="270" y="392" text-anchor="middle">STIG-hardened · no internet</text>
+
+  <!-- Member server -->
+  <rect class="vm" x="490" y="300" width="280" height="120" rx="7"/>
+  <text class="vmname" x="630" y="332" text-anchor="middle">MS01 · Member Server</text>
+  <text class="vmrole" x="630" y="352" text-anchor="middle">domain-joined</text>
+  <text class="vmsub" x="630" y="372" text-anchor="middle">Windows Server 2022</text>
+  <text class="vmsub" x="630" y="392" text-anchor="middle">STIG-hardened</text>
+
+  <!-- FLOWS -->
+  <!-- Analyst trunk -> branch to DC + MS -->
+  <path class="flow-g" d="M455,134 L455,270"/>
+  <path class="flow-g" marker-end="url(#rmf-green)" d="M455,270 L270,270 L270,296"/>
+  <path class="flow-g" marker-end="url(#rmf-green)" d="M455,270 L630,270 L630,296"/>
+  <rect class="pill" x="300" y="150" width="310" height="17" rx="4"/>
+  <text class="plabel" x="455" y="162" text-anchor="middle" fill="#3ef08b">RDP 3389 · vuln + STIG scans (fixed IP only)</text>
+
+  <!-- DC <-> MS domain traffic -->
+  <path class="flow-g" marker-start="url(#rmf-green-e)" marker-end="url(#rmf-green-s)" d="M412,360 L488,360"/>
+  <rect class="pill" x="352" y="428" width="196" height="17" rx="4"/>
+  <text class="plabel" x="450" y="440" text-anchor="middle" fill="#3ef08b">Kerberos 88 · LDAP 389 · DNS 53 · SMB 445</text>
+
+  <!-- Internet -> DC blocked (routed down the left gutter to avoid labels) -->
+  <path class="flow-r" marker-end="url(#rmf-red)" d="M133,134 L133,168 L38,168 L38,378 L128,378"/>
+  <text x="38" y="286" text-anchor="middle" font-size="15" fill="#ff5b6a" font-weight="700">✕</text>
+  <rect class="pill" x="70" y="143" width="126" height="17" rx="4"/>
+  <text class="plabel" x="133" y="155" text-anchor="middle" fill="#ff5b6a">no internet (SC-7)</text>
+
+  <!-- Legend -->
+  <line class="flow-g" x1="30" y1="512" x2="60" y2="512"/>
+  <text class="legtxt" x="66" y="516">admin access · scans · domain auth</text>
+  <line class="flow-r" x1="330" y1="512" x2="360" y2="512"/>
+  <text class="legtxt" x="366" y="516">blocked (no internet)</text>
+</svg>

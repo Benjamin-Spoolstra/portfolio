@@ -1,0 +1,39 @@
+---
+import { upcomingCerts, upcomingProjects } from "../data/site.ts";
+---
+
+<section class="section" id="roadmap">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">04</span><h2>Roadmap</h2></div>
+    <div class="roadmap">
+      <div>
+        <h3>// upcoming certifications</h3>
+        <ul class="timeline">
+          {
+            upcomingCerts.map((c) => (
+              <li class={c.active ? "active" : ""}>
+                <div class="t">{c.t}</div>
+                <div class="d">{c.d}</div>
+                <div class="when">{c.when}</div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h3>// planned projects</h3>
+        <ul class="timeline">
+          {
+            upcomingProjects.map((p) => (
+              <li class={p.active ? "active" : ""}>
+                <div class="t">{p.t}</div>
+                <div class="d">{p.d}</div>
+                <div class="when">{p.when}</div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

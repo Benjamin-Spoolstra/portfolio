@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+import { writeupRepos } from "../data/site.ts";
+
+const diffBadge: Record<string, string> = {
+  easy: "low",
+  medium: "high",
+  hard: "med",
+  insane: "crit",
+};
+
+const writeups = (await getCollection("writeups", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+// unique platforms for the filter bar
+const platforms = Array.from(new Set(writeups.map((w) => w.data.platform))).sort();
+---
+
+<section class="section" id="writeups">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">02</span><h2>Writeups &amp; Labs</h2></div>
+
+    {
+      writeups.length > 0 && (
+        <div class="filterbar" role="group" aria-label="Filter writeups by platform">
+          <button data-filter="all" aria-pressed="true">all</button>
+          {platforms.map((p) => (
+            <button data-filter={p} aria-pressed="false">
+              {p}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      writeups.length > 0 ? (
+        <div class="grid" id="writeup-grid">
+          {writeups.map((w) => (
+            <a class="card" href={`/writeups/${w.id}/`} data-platform={w.data.platform}>
+              <div class="top">
+                <h3>{w.data.title}</h3>
+                <span class={`badge ${diffBadge[w.data.difficulty]}`}>
+                  {w.data.difficulty}
+                </span>
+              </div>
+              <p>{w.data.summary}</p>
+              <div class="tags">
+                <span>{w.data.kind.toUpperCase()}</span>
+                <span>{w.data.category}</span>
+              </div>
+              <div class="meta">
+                <span>{w.data.platform}</span>
+                <span class="go">read →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-note">
+          No published writeups yet. Drop a Markdown file in{" "}
+          <code>src/content/writeups/</code> to add one.
+        </p>
+      )
+    }
+
+    <div class="sec-head" style="margin-top:44px;">
+      <span class="tag">↳</span><h2 style="font-size:16px;">Full collections on GitHub</h2>
+    </div>
+    <div class="grid">
+      {
+        writeupRepos.map((r) => (
+          <a class="card" href={r.href} target="_blank" rel="noopener">
+            <div class="top">
+              <h3>{r.name}</h3>
+            </div>
+            <p>{r.desc}</p>
+            <div class="meta">
+              <span>github</span>
+              <span class="go">open →</span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Simple platform filter — no framework needed
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filterbar button");
+  const cards = document.querySelectorAll<HTMLAnchorElement>("#writeup-grid .card");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      cards.forEach((card) => {
+        const show = filter === "all" || card.dataset.platform === filter;
+        card.style.display = show ? "" : "none";
+      });
+    });
+  });
+</script>

@@ -1,0 +1,53 @@
+---
+import { profile, stats } from "../data/site.ts";
+---
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">// {profile.role.toLowerCase()} portfolio</div>
+    <h1 class="glow">{profile.name}</h1>
+    <p class="sub">{profile.tagline}</p>
+
+    <div class="term" aria-label="terminal">
+      <div class="term-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span style="margin-left:6px;">bash — {profile.handle}@vps</span>
+      </div>
+      <div class="term-body">
+        {
+          profile.terminal.map((line) => {
+            if (line.type === "cursor") {
+              return (
+                <div class="line">
+                  <span class="prompt">$</span> <span class="cursor" />
+                </div>
+              );
+            }
+            if (line.type === "prompt") {
+              return (
+                <div class="line">
+                  <span class="prompt">$</span> {line.text}
+                </div>
+              );
+            }
+            if (line.type === "comment") {
+              return <div class="line comment"># {line.text}</div>;
+            }
+            return <div class="line out">{line.text}</div>;
+          })
+        }
+      </div>
+    </div>
+
+    <div class="stats">
+      {
+        stats.map((s) => (
+          <div class="stat">
+            <div class="n">{s.n}</div>
+            <div class="l">{s.l}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</header>

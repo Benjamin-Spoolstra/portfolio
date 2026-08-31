@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const writeups = await getCollection("writeups", ({ data }) => !data.draft);
+  return writeups.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={`${entry.data.title} — Writeup`} description={entry.data.summary}>
+  <div class="wrap" style="padding-top:48px; padding-bottom:60px;">
+    <div class="prose">
+      <a class="back-link" href="/#writeups">← back to writeups</a>
+      <h1>{entry.data.title}</h1>
+
+      <div class="meta-row">
+        <span class="chip"><b>platform</b> {entry.data.platform}</span>
+        <span class="chip"><b>category</b> {entry.data.category}</span>
+        <span class="chip"><b>difficulty</b> {entry.data.difficulty}</span>
+        <span class="chip"
+          ><b>date</b>{" "}
+          {entry.data.date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span
+        >
+      </div>
+
+      {
+        entry.data.tags.length > 0 && (
+          <div class="tags" style="margin-bottom:28px;">
+            {entry.data.tags.map((t) => (
+              <span>{t}</span>
+            ))}
+          </div>
+        )
+      }
+
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

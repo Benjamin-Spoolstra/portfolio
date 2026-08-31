@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace">
+  <defs>
+    <marker id="soc-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#3ef08b"/>
+    </marker>
+    <marker id="soc-amber" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#ffcf5b"/>
+    </marker>
+    <marker id="soc-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#ff5b6a"/>
+    </marker>
+  </defs>
+
+  <style>
+    .bg { fill:#08110b; }
+    .title { fill:#3ef08b; font-size:19px; font-weight:700; }
+    .sub { fill:#7a9c88; font-size:12px; }
+    .vnet { fill:#0c130e; stroke:#2f6b48; stroke-width:1.5; }
+    .vnetlbl { fill:#7a9c88; font-size:12px; letter-spacing:1px; }
+    .zone { fill:#101a13; stroke:#2f6b48; stroke-width:1; stroke-dasharray:5 4; }
+    .zonelbl { fill:#d4f5e2; font-size:12.5px; font-weight:600; }
+    .zonecidr { fill:#7a9c88; font-size:11px; }
+    .vm { fill:#121c15; stroke:#3ef08b; stroke-width:1.4; }
+    .ext { fill:#121c15; stroke:#7a9c88; stroke-width:1.2; }
+    .vmname { fill:#d4f5e2; font-size:13px; font-weight:600; }
+    .vmsub { fill:#7a9c88; font-size:11px; }
+    .nsg { fill:#0d1f16; stroke:#3ef08b; stroke-width:1; }
+    .nsgtxt { fill:#3ef08b; font-size:9.5px; letter-spacing:0.5px; }
+    .flow-g { stroke:#3ef08b; stroke-width:1.8; fill:none; }
+    .flow-a { stroke:#ffcf5b; stroke-width:1.8; fill:none; }
+    .flow-r { stroke:#ff5b6a; stroke-width:1.6; fill:none; stroke-dasharray:5 4; }
+    .plabel { font-size:10.5px; }
+    .pill { fill:#0a1610; stroke-width:0; }
+    .legtxt { fill:#7a9c88; font-size:11px; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="900" height="620" rx="14"/>
+
+  <text class="title" x="28" y="40">Azure Cloud SOC — Logical Network Design</text>
+  <text class="sub" x="28" y="60">Network segmentation with per-subnet NSGs · attack-and-detect telemetry flow</text>
+
+  <!-- External nodes -->
+  <rect class="ext" x="40" y="82" width="210" height="50" rx="7"/>
+  <text class="vmname" x="145" y="104" text-anchor="middle">Analyst Workstation</text>
+  <text class="vmsub" x="145" y="120" text-anchor="middle">home IP · SSH + Dashboard</text>
+
+  <rect class="ext" x="650" y="82" width="200" height="50" rx="7"/>
+  <text class="vmname" x="750" y="104" text-anchor="middle">Internet</text>
+  <text class="vmsub" x="750" y="120" text-anchor="middle">untrusted</text>
+
+  <!-- VNet -->
+  <rect class="vnet" x="24" y="152" width="852" height="418" rx="10"/>
+  <text class="vnetlbl" x="42" y="178">AZURE VIRTUAL NETWORK · vnet-soc</text>
+
+  <!-- SOC subnet (top center) -->
+  <rect class="zone" x="300" y="196" width="300" height="150" rx="8"/>
+  <text class="zonelbl" x="318" y="220">SOC Subnet</text>
+  <text class="zonecidr" x="318" y="236">10.0.1.0/24</text>
+  <rect class="nsg" x="520" y="206" width="66" height="18" rx="4"/>
+  <text class="nsgtxt" x="553" y="219" text-anchor="middle">NSG</text>
+  <rect class="vm" x="330" y="250" width="240" height="82" rx="7"/>
+  <text class="vmname" x="450" y="278" text-anchor="middle">Wazuh SIEM · 10.0.1.4</text>
+  <text class="vmsub" x="450" y="296" text-anchor="middle">Manager · Indexer · Dashboard</text>
+  <text class="vmsub" x="450" y="312" text-anchor="middle">inbound: 22 · 443 · 1514 · 1515</text>
+
+  <!-- Attacker subnet (bottom left) -->
+  <rect class="zone" x="60" y="392" width="320" height="160" rx="8"/>
+  <text class="zonelbl" x="78" y="416">Attacker Subnet</text>
+  <text class="zonecidr" x="78" y="432">10.0.3.0/24</text>
+  <rect class="nsg" x="300" y="402" width="66" height="18" rx="4"/>
+  <text class="nsgtxt" x="333" y="415" text-anchor="middle">NSG</text>
+  <rect class="vm" x="90" y="446" width="260" height="82" rx="7"/>
+  <text class="vmname" x="220" y="474" text-anchor="middle">Attacker VM · 10.0.3.4</text>
+  <text class="vmsub" x="220" y="492" text-anchor="middle">Nmap · Hydra</text>
+  <text class="vmsub" x="220" y="508" text-anchor="middle">+ Wazuh agent</text>
+
+  <!-- Victim subnet (bottom right) -->
+  <rect class="zone" x="520" y="392" width="320" height="160" rx="8"/>
+  <text class="zonelbl" x="538" y="416">Victim Subnet</text>
+  <text class="zonecidr" x="538" y="432">10.0.2.0/24</text>
+  <rect class="nsg" x="760" y="402" width="66" height="18" rx="4"/>
+  <text class="nsgtxt" x="793" y="415" text-anchor="middle">NSG</text>
+  <rect class="vm" x="550" y="446" width="260" height="82" rx="7"/>
+  <text class="vmname" x="680" y="474" text-anchor="middle">Victim VM · 10.0.2.4</text>
+  <text class="vmsub" x="680" y="492" text-anchor="middle">vsftpd:21 · sshd:22</text>
+  <text class="vmsub" x="680" y="508" text-anchor="middle">+ Wazuh agent</text>
+
+  <!-- FLOWS -->
+  <!-- Analyst -> SIEM (mgmt) -->
+  <path class="flow-g" marker-end="url(#soc-green)" d="M145,132 L145,291 L328,291"/>
+  <rect class="pill" x="150" y="256" width="150" height="17" rx="4"/>
+  <text class="plabel" x="155" y="268" fill="#3ef08b">SSH 22 · HTTPS 443 (home IP)</text>
+
+  <!-- Internet -> Victim (blocked) -->
+  <path class="flow-r" marker-end="url(#soc-red)" d="M750,132 L750,388"/>
+  <text x="750" y="250" text-anchor="middle" font-size="15" fill="#ff5b6a" font-weight="700">✕</text>
+  <rect class="pill" x="672" y="222" width="156" height="17" rx="4"/>
+  <text class="plabel" x="750" y="234" text-anchor="middle" fill="#ff5b6a">no inbound from internet</text>
+
+  <!-- Attacker -> Victim (attack) -->
+  <path class="flow-a" marker-end="url(#soc-amber)" d="M350,487 L548,487"/>
+  <rect class="pill" x="360" y="462" width="180" height="17" rx="4"/>
+  <text class="plabel" x="450" y="474" text-anchor="middle" fill="#ffcf5b">Nmap · FTP/SSH brute-force</text>
+
+  <!-- Attacker -> SIEM (agent) -->
+  <path class="flow-g" marker-end="url(#soc-green)" d="M250,446 L250,360 L400,360 L400,334"/>
+  <rect class="pill" x="256" y="384" width="118" height="17" rx="4"/>
+  <text class="plabel" x="262" y="396" fill="#3ef08b">agent 1514/1515</text>
+
+  <!-- Victim -> SIEM (agent) -->
+  <path class="flow-g" marker-end="url(#soc-green)" d="M650,446 L650,360 L500,360 L500,334"/>
+  <rect class="pill" x="526" y="384" width="118" height="17" rx="4"/>
+  <text class="plabel" x="532" y="396" fill="#3ef08b">agent 1514/1515</text>
+
+  <!-- Legend -->
+  <line class="flow-g" x1="30" y1="596" x2="60" y2="596"/>
+  <text class="legtxt" x="66" y="600">management / telemetry</text>
+  <line class="flow-a" x1="250" y1="596" x2="280" y2="596"/>
+  <text class="legtxt" x="286" y="600">simulated attack</text>
+  <line class="flow-r" x1="430" y1="596" x2="460" y2="596"/>
+  <text class="legtxt" x="466" y="600">blocked</text>
+</svg>

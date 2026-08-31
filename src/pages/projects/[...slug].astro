@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  return projects.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const catLabel: Record<string, string> = {
+  offensive: "Offensive Security",
+  defensive: "Defensive / Blue Team",
+  grc: "GRC",
+  tooling: "Tooling",
+};
+---
+
+<BaseLayout title={`${entry.data.title} — Project`} description={entry.data.summary}>
+  <div class="wrap" style="padding-top:48px; padding-bottom:60px;">
+    <div class="prose">
+      <a class="back-link" href="/#projects">← back to projects</a>
+      <h1>{entry.data.title}</h1>
+
+      <div class="meta-row">
+        <span class="chip"><b>type</b> {catLabel[entry.data.category]}</span>
+        <span class="chip"
+          ><b>date</b>{" "}
+          {entry.data.date.toLocaleDateString("en-US", { year: "numeric", month: "short" })}</span
+        >
+        {entry.data.repoUrl && (
+          <a class="chip" href={entry.data.repoUrl} target="_blank" rel="noopener">
+            <b>repo</b> github ↗
+          </a>
+        )}
+      </div>
+
+      {
+        entry.data.tools.length > 0 && (
+          <div class="tags" style="margin-bottom:28px;">
+            {entry.data.tools.map((t) => (
+              <span>{t}</span>
+            ))}
+          </div>
+        )
+      }
+
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

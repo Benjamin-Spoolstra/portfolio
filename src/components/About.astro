@@ -1,0 +1,58 @@
+---
+import { about, skills, contact } from "../data/site.ts";
+
+// Tiny inline formatter: **bold** and _italic_ only, everything else escaped.
+function inline(md: string): string {
+  const esc = md
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  return esc
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/_(.+?)_/g, "<em>$1</em>");
+}
+
+function bar(level: number): string {
+  const filled = Math.round((level / 10) * 10);
+  return "█".repeat(filled) + "░".repeat(10 - filled);
+}
+---
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">05</span><h2>About</h2></div>
+    <div class="about-grid">
+      <div>
+        {about.map((p) => <p set:html={inline(p)} />)}
+      </div>
+      <ul class="skill-list">
+        {
+          skills.map((s) => (
+            <li>
+              <span>{s.label}</span>
+              <span>{bar(s.level)}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">06</span><h2>Contact</h2></div>
+    <div class="contact-list">
+      {
+        contact.map((c) => (
+          <div class="contact-row">
+            <span class="k">{c.k}</span>
+            <a class="v" href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener">
+              {c.v}
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

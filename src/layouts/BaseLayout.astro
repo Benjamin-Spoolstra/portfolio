@@ -1,0 +1,65 @@
+---
+import "../styles/global.css";
+import { profile } from "../data/site.ts";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${profile.name} — ${profile.role}`,
+  description = profile.tagline,
+} = Astro.props;
+
+const nav = [
+  { href: "/#projects", label: "projects" },
+  { href: "/#writeups", label: "writeups" },
+  { href: "/#certs", label: "certs" },
+  { href: "/#roadmap", label: "roadmap" },
+  { href: "/#about", label: "about" },
+  { href: "/#contact", label: "contact" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#060a07" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="/">root@{profile.handle}<span class="cursor"></span></a>
+        <div class="navlinks">
+          {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        &copy; {new Date().getFullYear()} {profile.name} — built with Astro, deployed on the edge
+      </div>
+    </footer>
+  </body>
+</html>
