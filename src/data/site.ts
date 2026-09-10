@@ -46,8 +46,7 @@ export const upcomingCerts = [
 ];
 
 export const upcomingProjects = [
-  { t: "HashCat Cracking Rig with NVIDIA GPUs", d: "Centralized Location for Password and Hash Cracking", when: "Planned", active: false },
-  { t: "Autonomous AI Penetration Testing Framework", d: "AI Penetration Testing Framework to Speed up Bug Bounty Hunting", when: "Planned", active: false },
+  { t: "HackerOne Bug Bounty Hunting", d: "An ongoing bug bounty project", when: "Planned", active: false },
 ];
 
 // ── Skills (label + 0-10 level, rendered as a bar) ──────────────
