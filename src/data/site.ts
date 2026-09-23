@@ -69,7 +69,7 @@ export const about = [
 // ── Contact / links ─────────────────────────────────────────────
 export const contact = [
   { k: "github", v: "github.com/Benjamin-Spoolstra", href: "https://github.com/Benjamin-Spoolstra" },
-  { k: "email", v: "bspoolstra@proton.me", href: "mailto:benjaminspoolstra@gmail.com" },
+  { k: "email", v: "bspoolstra@proton.me", href: "mailto:bspoolstra@proton.me" },
   { k: "linkedin", v: "linkedin.com/in/benjamin-spoolstra-2a6b5b332/", href: "https://www.linkedin.com/in/benjamin-spoolstra-2a6b5b332/" },
   { k: "CyLab Academy", v: "Profile", href: "https://learn.cylabacademy.org/users/BenSec" },
   { k: "TryHackMe", v: "Profile", href: "https://tryhackme.com/p/benjaminspoolstra" },
